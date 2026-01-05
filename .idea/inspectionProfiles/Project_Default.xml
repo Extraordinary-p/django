@@ -1,0 +1,77 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="ignoredPackages">
+        <list>
+          <option value="starlette" />
+          <option value="uvicorn" />
+          <option value="mcp" />
+          <option value="aiomysql" />
+          <option value="pymysql" />
+          <option value="prometheus-client" />
+          <option value="aiohttp" />
+          <option value="python-multipart" />
+          <option value="python-dotenv" />
+          <option value="amqp" />
+          <option value="billiard" />
+          <option value="bleach" />
+          <option value="bootstrap-admin" />
+          <option value="celery" />
+          <option value="certifi" />
+          <option value="chardet" />
+          <option value="defusedxml" />
+          <option value="Django" />
+          <option value="django-allauth" />
+          <option value="django-appconf" />
+          <option value="django-celery-beat" />
+          <option value="django-celery-results" />
+          <option value="django-crispy-forms" />
+          <option value="django-haystack" />
+          <option value="django-imagekit" />
+          <option value="django-redis" />
+          <option value="django-tctip" />
+          <option value="django-timezone-field" />
+          <option value="djangorestframework" />
+          <option value="django-webstack" />
+          <option value="gunicorn" />
+          <option value="html5lib" />
+          <option value="idna" />
+          <option value="importlib-metadata" />
+          <option value="jieba" />
+          <option value="kombu" />
+          <option value="Markdown" />
+          <option value="markdown-checklist" />
+          <option value="mysqlclient" />
+          <option value="oauthlib" />
+          <option value="olefile" />
+          <option value="packaging" />
+          <option value="pilkit" />
+          <option value="Pillow" />
+          <option value="pycryptodome" />
+          <option value="Pygments" />
+          <option value="pyparsing" />
+          <option value="python-crontab" />
+          <option value="python-dateutil" />
+          <option value="python3-openid" />
+          <option value="pytz" />
+          <option value="redis" />
+          <option value="requests" />
+          <option value="requests-oauthlib" />
+          <option value="setuptools-scm" />
+          <option value="six" />
+          <option value="sqlparse" />
+          <option value="supervisor" />
+          <option value="urllib3" />
+          <option value="user-agent" />
+          <option value="vine" />
+          <option value="webencodings" />
+          <option value="Whoosh" />
+          <option value="zipp" />
+          <option value="sgmllib3k" />
+          <option value="feedparser" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
