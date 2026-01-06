@@ -75,25 +75,39 @@
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
     <script>
         $(() => {
+            // 为所有 class="comment" 元素内部的 <a> 标签绑定点击事件
             $('.comment > a').on('click', function (evt) {
-                evt.preventDefault()
+                // 阻止 <a> 标签的默认跳转行为（比如 href="#" 会滚动到顶部）
+                evt.preventDefault();
 
-                const $link = $(this)
-                const url = $link.attr('href')
+                // 将当前被点击的 <a> 元素包装成 jQuery 对象，方便后续操作
+                const $link = $(this);
 
+                // 获取该 <a> 标签的 href 属性值（即要请求的 URL）
+                const url = $link.attr('href');
+
+                // 发送 AJAX GET 请求，期望返回 JSON 数据
                 $.getJSON(url, (json) => {
-                    const code = Number(json.code)
+                    // 将返回的 json.code 转换为数字类型（确保是数值比较）
+                    const code = Number(json.code);
 
+                    // 如果返回状态码是 20000，表示操作成功
                     if (code === 20000) {
-                        // 更新对应的 strong 数字
-                        $link.nextAll('strong').first().text(json.count)
+                        // 找到当前 <a> 标签后面所有的 <strong> 元素，
+                        // 取第一个（通常是显示计数的数字），
+                        // 并将其文本内容更新为服务器返回的新 count 值
+                        $link.nextAll('strong').first().text(json.count);
                     }
+                    // 如果返回状态码是 20002，表示用户未登录
                     else if (code === 20002) {
-                        // 未登录，直接跳转登录页
-                        window.location.href = '/login/'
+                        // 跳转到登录页面
+                        window.location.href = '/login/';
                     }
+                    // 其他错误情况
                     else {
-                        alert(json.mesg || '操作失败')
+                        // 弹出提示框，显示服务器返回的错误信息（mesg），
+                        // 如果没有 mesg 字段，则显示“操作失败”
+                        alert(json.mesg || '操作失败');
                     }
                 })
             })

@@ -2,6 +2,7 @@
 
 
 class Subject(models.Model):
+    objects = None
     no = models.AutoField(primary_key=True, verbose_name='编号')
     name = models.CharField(max_length=50, verbose_name='名称')
     intro = models.CharField(max_length=1000, verbose_name='介绍')
@@ -13,6 +14,7 @@ class Subject(models.Model):
 
 
 class Teacher(models.Model):
+    objects = None
     no = models.AutoField(primary_key=True, verbose_name='编号')
     name = models.CharField(max_length=20, verbose_name='姓名')
     sex = models.BooleanField(default=True, verbose_name='性别')
