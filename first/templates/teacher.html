@@ -57,18 +57,47 @@
                 <div>
                     <span><strong>姓名：{{ teacher.name }}</strong></span>
                     <span>性别：{{ teacher.sex | yesno:'男,女' }}</span>
-                    <span>出生日期：{{ teacher.birth | date:'Y年n月j日'}}</span>
+                    <span>出生日期：{{ teacher.birth }}</span>
                 </div>
                 <div class="intro">{{ teacher.intro }}</div>
                 <div class="comment">
-                    <a href="">好评</a>&nbsp;(<strong>{{ teacher.good_count }}</strong>)
+                    <a href="/praise/?tno={{ teacher.no }}">好评</a>&nbsp;&nbsp;
+                    (<strong>{{ teacher.good_count }}</strong>)
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="">差评</a>&nbsp;<strong>{{ teacher.bad_count }}</strong>)
+                    <a href="/criticize/?tno={{ teacher.no }}">差评</a>&nbsp;&nbsp;
+                    (<strong>{{ teacher.bad_count }}</strong>)
                 </div>
             </div>
         </div>
         {% endfor %}
         <a href="/">返回首页</a>
     </div>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(() => {
+            $('.comment > a').on('click', function (evt) {
+                evt.preventDefault()
+
+                const $link = $(this)
+                const url = $link.attr('href')
+
+                $.getJSON(url, (json) => {
+                    const code = Number(json.code)
+
+                    if (code === 20000) {
+                        // 更新对应的 strong 数字
+                        $link.nextAll('strong').first().text(json.count)
+                    }
+                    else if (code === 20002) {
+                        // 未登录，直接跳转登录页
+                        window.location.href = '/login/'
+                    }
+                    else {
+                        alert(json.mesg || '操作失败')
+                    }
+                })
+            })
+        })
+    </script>
 </body>
 </html>
