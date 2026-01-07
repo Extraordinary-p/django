@@ -2,6 +2,8 @@
 
 
 class Subject(models.Model):
+    DoesNotExist = None
+    objects = None
     no = models.AutoField(primary_key=True, verbose_name='编号')
     name = models.CharField(max_length=50, verbose_name='名称')
     intro = models.CharField(max_length=1000, verbose_name='介绍')
@@ -13,6 +15,8 @@ class Subject(models.Model):
 
 
 class Teacher(models.Model):
+    DoesNotExist = None
+    objects = None
     no = models.AutoField(primary_key=True, verbose_name='编号')
     name = models.CharField(max_length=20, verbose_name='姓名')
     sex = models.BooleanField(default=True, verbose_name='性别')
@@ -26,3 +30,17 @@ class Teacher(models.Model):
     class Meta:
         managed = False
         db_table = 'tb_teacher'
+class User(models.Model):
+    """用户"""
+    objects = None
+    no = models.AutoField(primary_key=True, verbose_name='编号')
+    username = models.CharField(max_length=20, unique=True, verbose_name='用户名')
+    password = models.CharField(max_length=32, verbose_name='密码')
+    tel = models.CharField(max_length=20, verbose_name='手机号')
+    reg_date = models.DateTimeField(auto_now_add=True, verbose_name='注册时间')
+    last_visit = models.DateTimeField(null=True, verbose_name='最后登录时间')
+
+    class Meta:
+        db_table = 'tb_user'
+        verbose_name = '用户'
+        verbose_name_plural = '用户'

@@ -55,20 +55,57 @@
             </div>
             <div class="info">
                 <div>
+
                     <span><strong>姓名：{{ teacher.name }}</strong></span>
                     <span>性别：{{ teacher.sex | yesno:'男,女' }}</span>
-                    <span>出生日期：{{ teacher.birth | date:'Y年n月j日'}}</span>
+                    <span>出生日期：{{ teacher.birth }}</span>
                 </div>
                 <div class="intro">{{ teacher.intro }}</div>
                 <div class="comment">
-                    <a href="">好评</a>&nbsp;(<strong>{{ teacher.good_count }}</strong>)
+                    <a href="/praise/?tno={{ teacher.no }}">好评</a>&nbsp;&nbsp;
+                    (<strong>{{ teacher.good_count }}</strong>)
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="">差评</a>&nbsp;<strong>{{ teacher.bad_count }}</strong>)
+                    <a href="/criticize/?tno={{ teacher.no }}">差评</a>&nbsp;&nbsp;
+                    (<strong>{{ teacher.bad_count }}</strong>)
                 </div>
             </div>
         </div>
         {% endfor %}
         <a href="/">返回首页</a>
     </div>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+// 当 DOM 文档加载完成后执行（等价于 $(document).ready(...)）
+        $(() => {
+            // 为所有 class="comment" 元素下的直接子 <a> 标签绑定点击事件
+            $('.comment>a').on('click', (evt) => {
+                // 阻止 <a> 标签的默认跳转行为（例如跳转到 href 指定的 URL）
+                evt.preventDefault();
+
+                // 获取被点击的 <a> 元素的 href 属性值，作为 AJAX 请求的 URL
+                let url = $(evt.target).attr('href');
+
+                // 发送 GET 请求，期望服务器返回 JSON 数据
+                $.getJSON(url, (json) => {
+                    // 判断服务器返回的状态码是否为 20000（表示操作成功）
+                    if (json.code === 20000) {
+                        // 找到被点击的 <a> 元素的下一个兄弟元素（通常是 <strong>），
+                        // 并将其文本内容更新为服务器返回的新计数值
+                        $(evt.target).next().text(json.count);
+                    }
+                    // ❗注意：这里写错了！应该是 == 或 ===，而不是 =（赋值）
+                    else if (json.code === 20002) {  // ⚠️ 这是赋值，不是比较！
+                        // 跳转到登录页面（但因为上面是赋值，这行可能永远不执行或逻辑错误）
+                        window.location.href = '/login';
+                    }
+                    // 处理其他错误情况
+                    else {
+                        // 弹出警告框，显示服务器返回的错误信息（mesg 字段）
+                        alert(json.mesg);
+                    }
+                })
+            })
+        })
+    </script>
 </body>
 </html>
