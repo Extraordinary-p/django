@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'first',
     'debug_toolbar',
+    'rest_framework',
 ]
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'first/static'), ]
@@ -55,6 +56,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'first.middlewares.check_login_middleware',
+
 
 ]
 
@@ -141,3 +143,31 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# 下面的配置根据项目需要进行设置
+REST_FRAMEWORK = {
+    # 配置默认页面大小
+    # 'PAGE_SIZE': 10,
+    # 配置默认的分页类
+    # 'DEFAULT_PAGINATION_CLASS': '...',
+    # 配置异常处理器
+    # 'EXCEPTION_HANDLER': '...',
+    # 配置默认解析器
+    # 'DEFAULT_PARSER_CLASSES': (
+    #     'rest_framework.parsers.JSONParser',
+    #     'rest_framework.parsers.FormParser',
+    #     'rest_framework.parsers.MultiPartParser',
+    # ),
+    # 配置默认限流类
+    # 'DEFAULT_THROTTLE_CLASSES': (
+    #     '...'
+    # ),
+    # 配置默认授权类
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     '...',
+    # ),
+    # 配置默认认证类
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     '...',
+    # ),
+}

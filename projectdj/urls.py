@@ -24,15 +24,17 @@ from projectdj import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.show_subjects),
-    path('teachers/',views.show_teachers),
-    path('praise/', views.praise_or_criticize),
-    path('criticize/', views.praise_or_criticize),
-    path('login/', views.login),
-    path('captcha/', views.get_captcha),
-    path('logout/', views.logout),
-    path('excel/',views.export_teachers_excel),
-    path('table/',views.get_teachers_data),
+    # path('',views.show_subjects),
+    # path('teachers/',views.show_teachers),
+    # path('praise/', views.praise_or_criticize),
+    # path('criticize/', views.praise_or_criticize),
+    # path('login/', views.login),
+    # path('captcha/', views.get_captcha),
+    # path('logout/', views.logout),
+    # path('excel/',views.export_teachers_excel),
+    # path('table/',views.get_teachers_data),
+    path('api/subject/',views.show_subject),
+    path('api/teachers/',views.show_teachers),
 ]
 if settings.DEBUG:
 

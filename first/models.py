@@ -2,6 +2,7 @@
 
 
 class Subject(models.Model):
+    DoesNotExist = None
     objects = None
     no = models.AutoField(primary_key=True, verbose_name='编号')
     name = models.CharField(max_length=50, verbose_name='名称')

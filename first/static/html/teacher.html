@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- 设置页面字符编码为UTF-8 -->
+    <meta charset="UTF-8">
+    <title>老师信息</title>
+    <style>
+        /* 这里是 CSS 样式表的位置，可以根据需要添加样式 */
+    </style>
+</head>
+<body>
+    <!-- 页面内容容器 -->
+    <div id="container">
+        <!-- 显示学科名称 -->
+        <h1>{{ subject.name }}学科的老师信息</h1>
+        <hr>
+
+        <!-- 当加载完成并且没有老师信息时显示 "暂无该学科老师信息" -->
+        <h2 v-if="loaded && teachers.length == 0">暂无该学科老师信息</h2>
+
+        <!-- 遍历显示每位老师的信息 -->
+        <div class="teacher" v-for="teacher in teachers">
+            <!-- 显示老师的照片 -->
+            <div class="photo">
+                <!-- 动态绑定图片路径，使用老师的照片文件名 -->
+                <img :src="'/static/images/' + teacher.photo" height="140" alt="">
+            </div>
+
+            <!-- 显示老师的详细信息 -->
+            <div class="info">
+                <div>
+                    <!-- 显示老师姓名 -->
+                    <span><strong>姓名：{{ teacher.name }}</strong></span>
+                    <!-- 显示老师性别，使用自定义过滤器 maleOrFemale 来显示性别 -->
+                    <span>性别：{{ teacher.sex | maleOrFemale }}</span>
+                    <!-- 显示老师出生日期 -->
+                    <span>出生日期：{{ teacher.birth }}</span>
+                </div>
+                <!-- 显示老师介绍 -->
+                <div class="intro">{{ teacher.intro }}</div>
+
+                <!-- 显示老师评价功能 -->
+                <div class="comment">
+                    <!-- 点击“好评”时，调用 vote 方法并传递参数 true，表示给老师好评 -->
+                    <a href="" @click.prevent="vote(teacher, true)">好评</a>&nbsp;&nbsp;
+                    <!-- 显示好评数量 -->
+                    (<strong>{{ teacher.good_count }}</strong>)
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <!-- 点击“差评”时，调用 vote 方法并传递参数 false，表示给老师差评 -->
+                    <a href="" @click.prevent="vote(teacher, false)">差评</a>&nbsp;&nbsp;
+                    <!-- 显示差评数量 -->
+                    (<strong>{{ teacher.bad_count }}</strong>)
+                </div>
+            </div>
+        </div>
+
+        <!-- 返回首页链接 -->
+        <a href="/static/html/subject.html">返回首页</a>
+    </div>
+
+    <!-- 引入 Vue.js 库 -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.min.js"></script>
+
+    <script>
+        // 初始化 Vue 实例
+        let app = new Vue({
+            el: '#container', // 指定该 Vue 实例作用的 DOM 元素
+            data: {
+                subject: {},   // 用于存储学科信息
+                teachers: [],  // 用于存储老师信息
+                loaded: false  // 标记数据是否加载完成
+            },
+            created() {
+                // 组件创建时，发起请求获取老师数据
+                fetch('http://127.0.0.1:8000/api/teachers/' + location.search) // 通过 URL 查询获取老师信息
+                    .then(resp => resp.json())  // 解析响应的 JSON 数据
+                    .then(json => {
+                        // 将返回的学科和老师信息存储到 Vue 实例的 data 中
+                        this.subject = json.subject
+                        this.teachers = json.teachers
+                        this.loaded = true  // 标记数据加载完成
+                    })
+            },
+            filters: {
+                // 自定义过滤器：根据性别返回“男”或“女”
+                maleOrFemale(sex) {
+                    return sex ? '男' : '女'
+                }
+            },
+            methods: {
+                // 评价方法：根据 flag 的值进行好评或差评的操作
+                vote(teacher, flag) {
+                    // 根据 flag 选择 URL 路径
+                    let url = flag ? '/praise/' : '/criticize/'
+                    url += '?tno=' + teacher.no  // 拼接教师编号参数
+                    fetch(url)  // 发起请求
+                        .then(resp => resp.json())  // 解析响应数据
+                        .then(json => {
+                            // 如果请求成功，更新老师的评价计数
+                            if (json.code === 10000) {
+                                if (flag) {
+                                    teacher.good_count = json.count  // 更新好评数
+                                } else {
+                                    teacher.bad_count = json.count  // 更新差评数
+                                }
+                            }
+                        })
+                }
+            }
+        })
+    </script>
+</body>
+</html>
