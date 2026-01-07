@@ -87,13 +87,13 @@
                 // 发送 GET 请求，期望服务器返回 JSON 数据
                 $.getJSON(url, (json) => {
                     // 判断服务器返回的状态码是否为 20000（表示操作成功）
-                    if (json.code == 20000) {
+                    if (json.code === 20000) {
                         // 找到被点击的 <a> 元素的下一个兄弟元素（通常是 <strong>），
                         // 并将其文本内容更新为服务器返回的新计数值
                         $(evt.target).next().text(json.count);
                     }
                     // ❗注意：这里写错了！应该是 == 或 ===，而不是 =（赋值）
-                    else if (json.code == 20002) {  // ⚠️ 这是赋值，不是比较！
+                    else if (json.code === 20002) {  // ⚠️ 这是赋值，不是比较！
                         // 跳转到登录页面（但因为上面是赋值，这行可能永远不执行或逻辑错误）
                         window.location.href = '/login';
                     }

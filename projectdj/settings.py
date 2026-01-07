@@ -43,7 +43,7 @@ INSTALLED_APPS = [
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'first/static'), ]
 STATIC_URL = '/static/'
-
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

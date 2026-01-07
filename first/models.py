@@ -14,6 +14,7 @@ class Subject(models.Model):
 
 
 class Teacher(models.Model):
+    DoesNotExist = None
     objects = None
     no = models.AutoField(primary_key=True, verbose_name='编号')
     name = models.CharField(max_length=20, verbose_name='姓名')
@@ -30,6 +31,7 @@ class Teacher(models.Model):
         db_table = 'tb_teacher'
 class User(models.Model):
     """用户"""
+    objects = None
     no = models.AutoField(primary_key=True, verbose_name='编号')
     username = models.CharField(max_length=20, unique=True, verbose_name='用户名')
     password = models.CharField(max_length=32, verbose_name='密码')
