@@ -129,7 +129,7 @@ def export_teachers_excel(request):
     return resp
 #生成柱状图
 def get_teachers_data(request):
-    queryset = Teacher.objects.all()
+    queryset = Teacher.objects.all().only('name', 'good_count', 'bad_count')
     names = [teacher.name for teacher in queryset]
     good_counts = [teacher.good_count for teacher in queryset]
     bad_counts = [teacher.bad_count for teacher in queryset]
