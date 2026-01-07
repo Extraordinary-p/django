@@ -81,19 +81,41 @@ def export_teachers_excel(request):
     wb = xlwt.Workbook()
     # 添加工作表
     sheet = wb.add_sheet('老师信息表')
-    # 查询所有老师的信息
+    # 从数据库中查询所有 Teacher 模型的记录，返回一个 QuerySet 对象
     queryset = Teacher.objects.all()
-    # 向Excel表单中写入表头
+
+    # 定义 Excel 表格的表头（列名），用于显示给用户看的中文标题
     colnames = ('姓名', '介绍', '好评数', '差评数', '学科')
+
+    # 遍历表头元组 colnames，使用 enumerate 同时获取索引（列号）和值（中文列名）
     for index, name in enumerate(colnames):
+        # 在 Excel 的第 0 行（即第一行）写入表头：
+        #   - 第一个参数 0：表示写入第 0 行（Excel 行号从 0 开始）
+        #   - 第二个参数 index：表示写入第 index 列（A=0, B=1, C=2...）
+        #   - 第三个参数 name：要写入的实际文本（如“姓名”）
         sheet.write(0, index, name)
-    # 向单元格中写入老师的数据
+
+    # 定义与表头对应的模型字段名（属性名），顺序必须与 colnames 一一对应
     props = ('name', 'detail', 'good_count', 'bad_count', 'subject')
+
+    # 遍历所有教师数据（queryset），enumerate 返回 (行索引, 教师对象)
+    # 注意：row 从 0 开始，但 Excel 数据行应从第 1 行开始（因为第 0 行是表头）
     for row, teacher in enumerate(queryset):
+        # 再次遍历每个字段名（props），获取列索引 col 和字段名 prop
         for col, prop in enumerate(props):
+            # 从当前 teacher 对象中动态获取名为 prop 的属性值；
+            # 如果该属性不存在，则返回空字符串 ''（避免 AttributeError）
             value = getattr(teacher, prop, '')
+
+            # 特殊处理：如果获取到的 value 是 Subject 模型的实例（例如 subject 是外键）
+            # 则将其转换为该 Subject 对象的 name 属性（比如学科名称字符串）
             if isinstance(value, Subject):
-                value = value.name
+                value = value.name  # 假设 Subject 模型有一个 name 字段
+
+            # 将最终的 value 写入 Excel 单元格：
+            #   - 行号：row + 1（因为第 0 行是表头，数据从第 1 行开始）
+            #   - 列号：col（与 props 中的字段顺序一致）
+            #   - 值：value（可能是字符串、数字，或已转换的学科名称）
             sheet.write(row + 1, col, value)
     # 保存Excel
     buffer = BytesIO()
@@ -105,3 +127,10 @@ def export_teachers_excel(request):
     # 通过响应头告知浏览器下载该文件以及对应的文件名
     resp['content-disposition'] = f'attachment; filename*=utf-8\'\'{filename}'
     return resp
+#生成柱状图
+def get_teachers_data(request):
+    queryset = Teacher.objects.all()
+    names = [teacher.name for teacher in queryset]
+    good_counts = [teacher.good_count for teacher in queryset]
+    bad_counts = [teacher.bad_count for teacher in queryset]
+    return JsonResponse({'names': names, 'good': good_counts, 'bad': bad_counts})
